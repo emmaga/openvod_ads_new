@@ -1,0 +1,31 @@
+input[type="file"] {
+  display: none!important;
+}
+
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9!important;
+  border-radius: 6px!important;
+  cursor: pointer!important;
+  position: relative!important;
+  overflow: hidden!important;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #20a0ff!important;
+}
+.avatar-uploader-icon {
+  font-size: 28px!important;
+  color: #8c939d!important;
+  width: 178px!important;
+  height: 178px!important;
+  line-height: 178px!important;
+  text-align: center!important;
+}
+.avatar {
+  width: 178px!important;
+  height: 178px!important;
+  display: block!important;
+}
+
+.el-form-item__content{
+  text-align: left!important;
+}

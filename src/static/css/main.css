@@ -1,0 +1,133 @@
+/*字体大小跟加粗*/
+.FTW_B{
+  font-weight: bold;
+}
+
+.FS12{
+  font-size: 12px;
+}
+.FS14{
+  font-size: 14px;
+}
+.FS16{
+  font-size: 16px;
+}
+.FS18{
+  font-size: 18px;
+}
+.FS20{
+  font-size: 20px;
+}
+/*各种边距*/
+.mar-top20{
+  margin-top: 20px;
+}
+.mar-x20{
+  margin:0 20px;
+}
+.mar-y20{
+  margin:20px 0;
+}
+.mar-bottom20{
+  margin-bottom: 20px;
+}
+.mar-bottom15{
+  margin-bottom: 15px;
+}
+.mar-bottom10{
+  margin-bottom: 10px;
+}
+.mar-left20{
+  margin-left: 20px;
+}
+.mar-left10{
+  margin-left: 10px;
+}
+.pad-left10{
+  padding-left: 10px;
+}
+.pad-left60{
+  padding-left: 60px;
+}
+.pad-left20{
+  padding-left: 20px;
+}
+.pad-y5{
+  padding:15px 0 9px;
+}
+
+/*边框*/
+.bor-bottom-1{
+  border-bottom: 1px solid #ddd;
+}
+
+/*宽度：百分比或者固定宽度*/
+.WID100{
+  width: 100% !important;
+}
+.WID80{
+  width: 80% !important;
+}
+.WID60{
+  width: 60% !important;
+}
+.WID50{
+  width: 50% !important;
+}
+.WID40{
+  width: 40%!important;
+}
+.WID20{
+  width: 20%!important;
+}
+
+.WID100p{
+  width: 100px;
+}
+.WID500{
+  width: 500px;
+}
+
+/*浮动 定位 显示隐藏*/
+.FR{
+  float: right;
+}
+.FL{
+  float: left;
+}
+.DISIB{
+  display: inline-block;
+}
+.SHOWY{
+  display: block;
+}
+.SHON{
+  display: none;
+}
+
+/*文字对齐方式*/
+.Txt-right{
+  text-align: right;
+}
+.Txt-left{
+  text-align: left;
+}
+.Txt-center{
+  text-align: center;
+}
+
+/*各种position*/
+.pos-fix{
+  position: fixed;
+}
+.pos-rel{
+  position: relative;
+}
+.pos-abs{
+  position: absolute;
+}
+
+
+
+
+
