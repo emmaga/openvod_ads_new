@@ -1,10 +1,10 @@
 <template>
   <div>
     <div style="overflow:auto;">
-      <div class="Txt-left">
-        广告投放
+      <div class="Txt-left FS18 pad-x20 pad-top20px">
+        <span class="FS16">当前位置：</span><b>广告投放</b>
       </div>
-      <div style="padding: 20px;">
+      <div class="pad-x20">
         <div class="Txt-left" style="margin-top: 20px;">
           <el-button type="primary" style="margin-bottom: 15px;"
                      @click="addUserShow = true">添加用户</el-button>
@@ -346,7 +346,7 @@
     position: relative;
     padding: 20px;
     width: 50%;
-    margin: 40px auto;
+    margin: 130px auto;
     opacity: 1;
     z-index: 3;
     background: #fff;

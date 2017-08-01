@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="body">
     <v-header></v-header>
     <div class="main-box">
       <v-nav class="main-nav" style="display: inline-block;width: 150px;vertical-align: top;"></v-nav><div class="main-content" style="display: inline-block;"><router-view></router-view></div>
@@ -43,7 +43,14 @@
     height:-webkit-calc(100vh - 60px);
     /*Standard */
     height: calc(100vh - 60px);
+    overflow: auto;
   }
-  .main-box{
+  .body{
+    height: -moz-calc(100vh);
+    /*chrome safari*/
+    height:-webkit-calc(100vh);
+    /*Standard */
+    height: calc(100vh);
+    overflow-y:hidden ;
   }
 </style>

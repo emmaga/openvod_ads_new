@@ -22,10 +22,10 @@
           <el-form-item label="描述" required prop="Description">
             <el-input type="text" v-model="editData.data.Description" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="ScheduleTypeParam" prop="ScheduleTypeParam">
+          <el-form-item label="广告策略参数" prop="ScheduleTypeParam">
             <el-input type="text" v-model="editData.data.ScheduleTypeParam" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="ScheduleType" prop="ScheduleType">
+          <el-form-item label="广告策略类型" prop="ScheduleType">
             <el-input type="text" v-model="editData.data.ScheduleType" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="广告开始时间" required prop="LifeStartTime">

@@ -48,6 +48,10 @@ export default new Router({
           component: userManage
         }
       ]
+    },
+    {
+      path: '*', // 其他页面，强制跳转到登录页面
+      redirect: '/'
     }
   ]
 })

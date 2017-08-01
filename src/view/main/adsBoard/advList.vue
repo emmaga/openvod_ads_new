@@ -61,12 +61,12 @@
     <!--添加广告弹窗-->
     <div id="addAdvListModal" v-show="allAdvListShow">
       <div class="addAdvListModal_content">
-        <div class="FS20" style="">广告位添加广告<button class="btn" style="float: right" @click="allAdvListShow = false">&times;</button></div>
+        <div class="FS20" style="">广告位添加广告<button class="btn" style="float: right" @click="allAdvListShow = false;checkList = []">&times;</button></div>
         <div style="margin-top: 20px;margin-bottom: 5px;border-bottom: 1px solid gray;"></div>
         <div>
-          <el-checkbox-group v-model="checkList">
+          <el-checkbox-group v-model="checkList" >
             <div class="pad-y5 bor-bottom-1"  @click = "checkBox" v-for="item in allAdvList">
-              <el-checkbox :label="item.ID" :key="item.ID"><span class="Txt-left pad-left60 DISIB WID500">{{item.Name}}</span></el-checkbox>
+              <el-checkbox :label="item.AdvID" :key="item.AdvID"><span class="Txt-left pad-left60 DISIB WID500">{{item.Name}}</span></el-checkbox>
             </div>
 
           </el-checkbox-group>
@@ -75,7 +75,7 @@
           <!--<button class="btn btn-success" @click="positionAddAdv">添加</button>-->
           <!--<button class="btn mar-left20 btn-warning" @click="allAdvListShow = false">取消</button>-->
           <el-button type="primary" @click="positionAddAdv">添加</el-button>
-          <el-button class="mar-left20" @click="allAdvListShow = false">取消</el-button>
+          <el-button class="mar-left20" @click="allAdvListShow = false;checkList = []">取消</el-button>
         </div>
       </div>
     </div>
@@ -128,15 +128,17 @@
         this.$emit('close', false)
       },
       getadvList () {
-        this.axios.post('/adv', {
-          action: 'getList',
+        this.axios.post('/position', {
+          action: 'getAdvList',
           data: {
+            PositionID: this.listData.PositionID,
             per_page: 25,
-            page: 1
+            page: 1,
+            exclude: true
           }
         })
           .then((data) => {
-            console.log(data)
+//            console.log(data)
             if (data.status === 200) {
               this.allAdvList = data.data.data.data
               this.Total = data.data.data.Toatl
@@ -167,7 +169,7 @@
           }
         })
           .then((data) => {
-            console.log(data)
+//            console.log(data)
             if (data.status === 200) {
 //              console.log(data)
               this.$message({
@@ -201,7 +203,7 @@
             }
           })
             .then((data) => {
-              console.log(data)
+//              console.log(data)
               if (data.status === 200) {
                 this.$message({
                   type: 'success',
@@ -227,9 +229,9 @@
           }
         })
           .then((data) => {
-            console.log(data)
+//            console.log(data)
             if (data.status === 200) {
-              console.log(data)
+//              console.log(data)
               this.listData.listData.data = data.data.data.data
               this.listData.listData.Total = data.data.data.Total
             } else {

@@ -54,7 +54,7 @@
         itemList: [],
         listData: {
           currentPage: 1,
-          pageSize: 2,
+          pageSize: 25,
           Total: null
         },
         selectedSqueue: [],
@@ -137,7 +137,7 @@
         this.selectedSqueue = []
         this.listData = {
           currentPage: 1,
-          pageSize: 2,
+          pageSize: 25,
           Total: null
         }
       },

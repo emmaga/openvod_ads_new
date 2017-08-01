@@ -20,31 +20,32 @@
             :data="advList"
             border
             style="width: 100%">
-            <el-table-column
-              label="预览图"
-              width="250">
-              <template scope="scope">
-                <!--<el-icon name="time"></el-icon>-->
-                <span style="margin-left: 10px">{{ scope.row.Seq }}</span>
-              </template>
-            </el-table-column>
+            <!--<el-table-column-->
+              <!--label="预览图"-->
+              <!--width="250">-->
+              <!--<template scope="scope">-->
+                <!--&lt;!&ndash;<el-icon name="time"></el-icon>&ndash;&gt;-->
+                <!--<span style="margin-left: 10px">{{ scope.row.Seq }}</span>-->
+              <!--</template>-->
+            <!--</el-table-column>-->
             <el-table-column
               label="名称"
-              width="250">
+              align="left"
+              width="400">
               <template scope="scope">
                 <!--<el-icon name="time"></el-icon>-->
                 <span style="margin-left: 10px">{{ scope.row.Name_CN }}</span>
               </template>
             </el-table-column>
-            <el-table-column
-              label="url"
-              width="250">
-              <template scope="scope">
-                <!--<el-icon name="time"></el-icon>-->
-                <span style="margin-left: 10px">{{ scope.row.URL }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="操作">
+            <!--<el-table-column-->
+              <!--label="url"-->
+              <!--width="250">-->
+              <!--<template scope="scope">-->
+                <!--&lt;!&ndash;<el-icon name="time"></el-icon>&ndash;&gt;-->
+                <!--<span style="margin-left: 10px">{{ scope.row.URL }}</span>-->
+              <!--</template>-->
+            <!--</el-table-column>-->
+            <el-table-column label="操作" align="left">
               <template scope="scope">
                 <!--<el-button-->
                 <!--size="small"-->
@@ -123,29 +124,29 @@
               <el-table-column
                 type="selection"
                 align="left"
-                width="55">
-              </el-table-column>
-              <el-table-column
-                label="预览图"
                 width="200">
-                <template scope="scope">
-                  <img  style="height: 150px;" :src="scope.row.URL" alt="">
-                  <!--<video v-if="currentMenu.Type === 'Video'" height="150px" width="150px" :src="scope.row.URL" alt=""  controls="controls"></video>-->
-                </template>
               </el-table-column>
+              <!--<el-table-column-->
+                <!--label="预览图"-->
+                <!--width="200">-->
+                <!--<template scope="scope">-->
+                  <!--<img  style="height: 150px;" :src="scope.row.URL" alt="">-->
+                  <!--&lt;!&ndash;<video v-if="currentMenu.Type === 'Video'" height="150px" width="150px" :src="scope.row.URL" alt=""  controls="controls"></video>&ndash;&gt;-->
+                <!--</template>-->
+              <!--</el-table-column>-->
               <el-table-column
                 prop="name"
                 label="名称"
                 align="left"
-                width="300">
+              >
                 <template scope="scope">{{ scope.row.Name_CN }}</template>
               </el-table-column>
-              <el-table-column
-                prop="address"
-                label="url"
-                show-overflow-tooltip>
-                <template scope="scope">{{ scope.row.URL }}</template>
-              </el-table-column>
+              <!--<el-table-column-->
+                <!--prop="address"-->
+                <!--label="url"-->
+                <!--show-overflow-tooltip>-->
+                <!--<template scope="scope">{{ scope.row.URL }}</template>-->
+              <!--</el-table-column>-->
             </el-table>
             <div class="block" style="text-align: left;margin-top: 15px;margin-bottom: 20px;">
               <el-pagination
@@ -174,7 +175,7 @@
         advList: [],
         listData: {
           currentPage: 1,
-          pageSize: 3,
+          pageSize: 25,
           Total: null,
           keyword: ''
         },
@@ -184,7 +185,7 @@
         advNewList: [],
         newlistData: {
           currentPage: 1,
-          pageSize: 3,
+          pageSize: 25,
           Total: null,
           keyword: ''
         },
@@ -310,7 +311,7 @@
       closeAdvList () {
         this.listData = {
           currentPage: 1,
-          pageSize: 3,
+          pageSize: 25,
           Total: null,
           keyword: ''
         }
@@ -320,7 +321,7 @@
         this.addAdvShow = false
         this.newlistData = {
           currentPage: 1,
-          pageSize: 3,
+          pageSize: 25,
           Total: null,
           keyword: ''
         }
@@ -425,7 +426,7 @@
   .advListModal_content{
     position: relative;
     padding: 20px;
-    width: 80%;
+    width: 70%;
     margin: 40px auto;
     opacity: 1;
     z-index: 3;
@@ -435,7 +436,7 @@
   .addAdvModal_content {
     position: relative;
     padding: 20px;
-    width: 80%;
+    width: 70%;
     margin: 40px auto;
     opacity: 1;
     z-index: 3;

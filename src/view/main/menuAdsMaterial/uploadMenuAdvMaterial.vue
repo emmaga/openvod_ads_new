@@ -8,11 +8,11 @@
       <div style="margin-top: 20px;margin-bottom: 20px;border-bottom: 1px solid #ddd;"></div>
       <div style="width: 90%;">
         <el-form :model="addAdvData" :rules="rules2" ref="addAdvData" label-width="35%" class="demo-ruleForm">
-          <el-form-item label="中文名称" required prop="name1">
-            <el-input type="text" placeholder="请输入中文名称" v-model="addAdvData.Name['zh-CN']" auto-complete="off"></el-input>
+          <el-form-item label="中文名称" required prop="NameCN">
+            <el-input type="text" placeholder="请输入中文名称" v-model="addAdvData.NameCN" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="英文名称" required prop="name2">
-            <el-input type="text" placeholder="请输入英文名称" v-model="addAdvData.Name['en-US']" auto-complete="off"></el-input>
+          <el-form-item label="英文名称" required prop="NameUS">
+            <el-input type="text" placeholder="请输入英文名称" v-model="addAdvData.NameUS" auto-complete="off"></el-input>
           </el-form-item>
 
           <el-form-item label="广告主" required prop="Owner">
@@ -92,7 +92,7 @@
 
   export default {
     data () {
-      var name1 = (rule, value, callback) => {
+      var NameCN = (rule, value, callback) => {
         console.log(value)
         if (value === '') {
           callback(new Error('请输入中文名称'))
@@ -100,7 +100,7 @@
           callback()
         }
       }
-      var name2 = (rule, value, callback) => {
+      var NameUS = (rule, value, callback) => {
         console.log(value)
         if (value === '') {
           callback(new Error('请输入英文名称'))
@@ -144,25 +144,27 @@
       }
       return {
         addAdvData: {
+          NameCN: '',
+          NameUS: '',
           Name: {
             'zh-CN': '',
             'en-US': ''
           },
           Owner: '',
           Description: '',
-          LifeStartTime: '',
-          LifeEndTime: '',
+          LifeStartTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+          LifeEndTime: '2030-12-31 23:59:59',
           PicURL: '',
           PicSize: '',
           HighlightPicURL: '',
           HighlightPicSize: ''
         },
         rules2: {
-          name1: [
-            {validator: name1, trigger: 'blur'}
+          NameCN: [
+            {validator: NameCN, trigger: 'blur'}
           ],
-          name2: [
-            {validator: name2, trigger: 'blur'}
+          NameUS: [
+            {validator: NameUS, trigger: 'blur'}
           ],
           Description: [
             {validator: Description, trigger: 'blur'}
@@ -189,6 +191,22 @@
       closeAddAdv (formName) {
         this.$emit('close', false)
         this.$refs['addAdvData'].resetFields()
+        this.addAdvData = {
+          NameCN: '',
+          NameUS: '',
+          Name: {
+            'zh-CN': '',
+            'en-US': ''
+          },
+          Owner: '',
+          Description: '',
+          LifeStartTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+          LifeEndTime: '2030-12-31 23:59:59',
+          PicURL: '',
+          PicSize: '',
+          HighlightPicURL: '',
+          HighlightPicSize: ''
+        }
       },
       submitUpload () {
         this.$refs.upload.submit()
@@ -210,6 +228,8 @@
               })
               return
             }
+            this.addAdvData.Name['zh-CN'] = this.addAdvData.NameCN
+            this.addAdvData.Name['en-US'] = this.addAdvData.NameUS
             this.addAdvData.LifeStartTime = moment(new Date(this.addAdvData.LifeStartTime)).format('YYYY-MM-DD h:mm:ss')
             this.addAdvData.LifeEndTime = moment(new Date(this.addAdvData.LifeEndTime)).format('YYYY-MM-DD h:mm:ss')
             console.log(this.addAdvData)
@@ -247,6 +267,7 @@
         })
 //        this.imageUrl = URL.createObjectURL(file.raw)
         this.addAdvData.PicURL = file.response.upload_path
+        this.addAdvData.PicSize = file.size
       },
       handleAvatarSuccess2 (res, file) {
         this.$message({
@@ -254,6 +275,7 @@
           message: '高亮图标上传成功!'
         })
         this.addAdvData.HighlightPicURL = file.response.upload_path
+        this.addAdvData.HighlightPicSize = file.size
       },
       beforeAvatarUpload (file) {
         console.log(file.type)

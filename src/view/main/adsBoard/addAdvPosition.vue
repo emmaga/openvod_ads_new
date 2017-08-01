@@ -22,10 +22,10 @@
           <el-form-item label="描述" required prop="Description">
             <el-input type="text" v-model="addAdvData.Description" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="ScheduleTypeParam" prop="ScheduleTypeParam">
+          <el-form-item label="广告策略参数" prop="ScheduleTypeParam">
             <el-input type="text" v-model="addAdvData.ScheduleTypeParam" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="ScheduleType" prop="ScheduleType">
+          <el-form-item label="广告策略类型" prop="ScheduleType">
             <el-input type="text" v-model="addAdvData.ScheduleType" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="广告开始时间" required prop="LifeStartTime">
@@ -106,10 +106,10 @@
       }
       return {
         addAdvData: {
-          LifeEndTime: '',
+          LifeEndTime: '2030-12-31 23:59:59',
           Name: '',
           AdvPositionTemplateName: '',
-          LifeStartTime: '',
+          LifeStartTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
           ScheduleTypeParam: 'test',
           ScheduleType: 'Sequence',
           Description: ''
@@ -138,6 +138,15 @@
       closeAddAdv () {
         this.$refs['addAdvData'].resetFields()
         this.$emit('close', false)
+        this.addAdvData = {
+          LifeEndTime: '2030-12-31 23:59:59',
+          Name: '',
+          AdvPositionTemplateName: '',
+          LifeStartTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+          ScheduleTypeParam: 'test',
+          ScheduleType: 'Sequence',
+          Description: ''
+        }
       },
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
@@ -223,7 +232,7 @@
   .addAdvPositonModal_content {
     position: relative;
     padding: 20px;
-    width: 50%;
+    width: 60%;
     margin: 40px auto;
     opacity: 1;
     z-index: 3;

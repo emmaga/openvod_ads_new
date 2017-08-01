@@ -129,9 +129,9 @@
       }
       return {
         addAdvData: {
-          LifeEndTime: '',
+          LifeEndTime: '2030-12-31 23:59:59',
           Name: '',
-          LifeStartTime: '',
+          LifeStartTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
           Description: '',
           Duration: '',
           Owner: '',
@@ -169,6 +169,16 @@
         this.clearInputValue()
         this.$emit('close', false)
         this.$refs['addAdvData'].resetFields()
+        this.addAdvData = {
+          LifeEndTime: '2030-12-31 23:59:59',
+          Name: '',
+          LifeStartTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+          Description: '',
+          Duration: '',
+          Owner: '',
+          URL: null,
+          Size: null
+        }
       },
       submitUpload () {
         this.$refs.upload.submit()

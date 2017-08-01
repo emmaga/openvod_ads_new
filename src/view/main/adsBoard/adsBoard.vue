@@ -1,10 +1,10 @@
 <template>
   <div>
     <div style="overflow:auto;">
-      <div class="Txt-left">
-        广告投放
+      <div class="Txt-left FS18 pad-x20 pad-top20px">
+        <span class="FS16">当前位置：</span><b>广告投放</b>
       </div>
-      <div style="padding: 20px;">
+      <div class="pad-x20">
         <div class="Txt-left" style="margin-top: 20px;">
           <el-button type="primary" style="margin-bottom: 15px;"
                      @click="addAdvPositionData.show = true">添加广告位</el-button>
@@ -15,7 +15,7 @@
               style="width: 100%">
               <el-table-column
                 label="名称"
-                width="180">
+                width="230">
                 <template scope="scope">
                   <!--<el-icon name="time"></el-icon>-->
                   <span style="margin-left: 10px">{{ scope.row.Name }}</span>
@@ -23,7 +23,7 @@
               </el-table-column>
               <el-table-column
                 label="描述"
-                width="180">
+                width="230">
                 <template scope="scope">
                   <!--<el-icon name="time"></el-icon>-->
                   <span style="margin-left: 10px">{{ scope.row.Description }}</span>
@@ -224,7 +224,8 @@
           data: {
             PositionID: ID,
             per_page: 25,
-            page: 1
+            page: 1,
+            exclude: false
           }
         })
           .then((data) => {

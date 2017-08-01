@@ -7,7 +7,7 @@
       </div>
       <div style="margin-top: 20px;margin-bottom: 20px;border-bottom: 1px solid #ddd;"></div>
       <div style="width: 90%;">
-        <el-form :model="editMenuData.data" :rules="rules2" ref="editMenuData.data" label-width="35%" class="demo-ruleForm">
+        <el-form :model="editMenuData.data" :rules="rules2" ref="editMenuData" label-width="35%" class="demo-ruleForm">
           <el-form-item label="名字" required prop="Name">
             <el-input type="text" v-model="editMenuData.data.Name" auto-complete="off"></el-input>
           </el-form-item>
@@ -57,6 +57,7 @@
     props: ['editMenuData'],
     methods: {
       closeeditMenuAdv () {
+        this.$refs['editMenuData'].resetFields()
         this.$emit('close', false)
       },
       submitForm (formName) {

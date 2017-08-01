@@ -28,6 +28,12 @@
 .mar-y20{
   margin:20px 0;
 }
+.pad-x20{
+  padding:0 20px;
+}
+.pad-top20px{
+  padding-top: 20px;
+}
 .mar-bottom20{
   margin-bottom: 20px;
 }

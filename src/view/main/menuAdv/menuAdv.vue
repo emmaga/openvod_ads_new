@@ -1,10 +1,10 @@
 <template>
   <div>
     <div style="overflow:auto;">
-      <div class="Txt-left">
-        菜单广告位
+      <div class="Txt-left FS18 pad-x20 pad-top20px">
+        <span class="FS16">当前位置：</span><b>菜单广告位</b>
       </div>
-      <div style="padding: 20px;">
+      <div class="pad-x20">
         <div class="Txt-left" style="margin-top: 20px;">
           <el-button type="primary" style="margin-bottom: 15px;"
                      @click="addMenuAdvPositionData.show = true">添加广告位</el-button>
@@ -26,11 +26,18 @@
                   <el-button
                     size="small"
                     type="primary"
+                    v-if="username === scope.row.UserName || role === 'Normal'"
                     @click="getAdvList(scope.row.ID)">广告列表</el-button>
                   <el-button
                     size="small"
                     type=""
+                    v-if="username === scope.row.UserName || role === 'Normal'"
                     @click="editAdvPosition(scope.row)">属性</el-button>
+                  <el-button
+                    size="small"
+                    type="danger"
+                    v-if="username === scope.row.UserName || role === 'Normal'"
+                    @click="deleteAdvPosition(scope.row.ID)">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -141,7 +148,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.axios.post('/position', {
+          this.axios.post('/menuposition', {
             action: 'delete',
             data: {
               ID: ID
@@ -154,7 +161,7 @@
                   type: 'success',
                   message: '删除成功!'
                 })
-                this.getAdPositionList()
+                this.getMenuAdvList()
               } else {
                 this.$message('！')
               }
@@ -168,6 +175,14 @@
         console.log(val)
         this.currentPage = val
         this.getMenuAdvList()
+      }
+    },
+    computed: {
+      username: function () {
+        return this.$store.state.username
+      },
+      role: function () {
+        return this.$store.state.role
       }
     },
     created () {

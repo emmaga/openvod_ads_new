@@ -1,5 +1,5 @@
 <template>
-  <div class="editAdvModal" v-show="editData.show">
+  <div class="editAdvModal" v-show="editModalShow">
     <div class="editAdvModal_content">
       <div class="FS20 mar-bottom15">广告属性
 
@@ -7,25 +7,25 @@
       </div>
       <div style="margin-top: 20px;margin-bottom: 20px;border-bottom: 1px solid #ddd;"></div>
       <div style="width: 90%;">
-        <el-form :model="editData.data" :rules="rules2" ref="editAdvData" label-width="35%" class="demo-ruleForm">
+        <el-form :model="editAdvData" :rules="rules2" ref="editAdvData" label-width="35%" class="demo-ruleForm">
           <el-form-item label="中文名称" required prop="Name">
-            <el-input type="text" placeholder="请输入中文名称" v-model="editData.data.Name['zh-CN']" auto-complete="off"></el-input>
+            <el-input type="text" placeholder="请输入中文名称" v-model="editAdvData.NameCN" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="英文名称" required prop="EnglishName">
-            <el-input type="text" placeholder="请输入英文名称" v-model="editData.data.Name['en-US']" auto-complete="off"></el-input>
+            <el-input type="text" placeholder="请输入英文名称" v-model="editAdvData.NameUS" auto-complete="off"></el-input>
           </el-form-item>
 
           <el-form-item label="广告主" required prop="Owner">
-            <el-input type="text" placeholder="请输入广告主名称" v-model="editData.data.Owner" auto-complete="off"></el-input>
+            <el-input type="text" placeholder="请输入广告主名称" v-model="editAdvData.Owner" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="描述" required prop="Description">
-            <el-input type="text" placeholder="请输入描述" v-model="editData.data.Description" auto-complete="off"></el-input>
+            <el-input type="text" placeholder="请输入描述" v-model="editAdvData.Description" auto-complete="off"></el-input>
           </el-form-item>
 
           <el-form-item label="广告开始时间" required prop="LifeStartTime">
             <div class="block">
               <el-date-picker
-                v-model="editData.data.LifeStartTime"
+                v-model="editAdvData.LifeStartTime"
                 type="datetime"
                 placeholder="选择日期时间">
               </el-date-picker>
@@ -34,7 +34,7 @@
           <el-form-item label="广告结束时间" required prop="LifeEndTime">
             <div class="block">
               <el-date-picker
-                v-model="editData.data.LifeEndTime"
+                v-model="editAdvData.LifeEndTime"
                 type="datetime"
                 placeholder="选择日期时间">
               </el-date-picker>
@@ -50,10 +50,10 @@
                 :show-file-list="false"
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload">
-                <img v-if="editData.data.PicURL" :src="editData.data.PicURL" class="avatar">
-                <i v-if="!editData.data.PicURL" class="el-icon-plus avatar-uploader-icon"></i>
+                <img v-if="editAdvData.PicURL" :src="editAdvData.PicURL" class="avatar">
+                <i v-if="!editAdvData.PicURL" class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
-              <span class="pos-abs" style="top: 0px; left: 190px;">建议尺寸：1920*1080,不超过1M</span>
+              <span class="pos-abs" style="top: 0px; left: 190px;">建议尺寸：110*110,不超过100K</span>
             </div>
           </el-form-item>
 
@@ -66,11 +66,11 @@
                 :show-file-list="false"
                 :on-success="handleAvatarSuccess2"
                 :before-upload="beforeAvatarUpload">
-                <img v-if="editData.data.HighlightPicURL" :src="editData.data.HighlightPicURL" class="avatar">
-                <i v-if="!editData.data.HighlightPicURL" class="el-icon-plus avatar-uploader-icon"></i>
+                <img v-if="editAdvData.HighlightPicURL" :src="editAdvData.HighlightPicURL" class="avatar">
+                <i v-if="!editAdvData.HighlightPicURL" class="el-icon-plus avatar-uploader-icon"></i>
 
               </el-upload>
-              <span class="pos-abs" style="top: 0px; left: 190px;">建议尺寸：1920*1080,不超过1M</span>
+              <span class="pos-abs" style="top: 0px; left: 190px;">建议尺寸：110*110,不超过100K</span>
             </div>
           </el-form-item>
 
@@ -92,8 +92,9 @@
   export default {
     data () {
       var Name = (rule, value, callback) => {
-        console.log(value)
-        if (value === '') {
+//        console.log(value)
+//        alert(this.editAdvData.NameCN)
+        if (this.editAdvData.NameCN === '') {
           callback(new Error('请输入中文名称'))
         } else {
           callback()
@@ -101,7 +102,7 @@
       }
       var EnglishName = (rule, value, callback) => {
         console.log(value)
-        if (value === '') {
+        if (this.editAdvData.NameUS === '') {
           callback(new Error('请输入英文名称'))
         } else {
           callback()
@@ -144,6 +145,8 @@
       return {
         editAdvData: {
           ID: '',
+          NameCN: '',
+          NameUS: '',
           Name: {
             'zh-CN': '',
             'en-US': ''
@@ -182,6 +185,20 @@
       }
     },
     props: ['editData'],
+    computed: {
+      editModalShow: function () {
+        return this.editData.show
+      }
+    },
+    watch: {
+      editModalShow: function (newDATA) {
+        if (newDATA === true) {
+          this.editAdvData = this.editData.data
+          this.editAdvData.NameCN = this.editData.data.Name['zh-CN']
+          this.editAdvData.NameUS = this.editData.data.Name['en-US']
+        }
+      }
+    },
     methods: {
       closeeditAdv (formName) {
         this.$emit('close', false)
@@ -193,26 +210,28 @@
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            if (this.editData.data.PicURL === '') {
+            if (this.editAdvData.PicURL === '') {
               this.$message({
                 type: 'error',
                 message: '请上传图标!'
               })
               return
             }
-            if (this.editData.data.HighlightPicURL === '') {
+            if (this.editAdvData.HighlightPicURL === '') {
               this.$message({
                 type: 'error',
                 message: '请上传高亮图标!'
               })
               return
             }
-            this.editData.data.LifeStartTime = moment(new Date(this.editData.data.LifeStartTime)).format('YYYY-MM-DD h:mm:ss')
-            this.editData.data.LifeEndTime = moment(new Date(this.editData.data.LifeEndTime)).format('YYYY-MM-DD h:mm:ss')
-            console.log(this.editData.data)
+            this.editAdvData.Name['zh-CN'] = this.editAdvData.NameCN
+            this.editAdvData.Name['en-US'] = this.editAdvData.NameUS
+            this.editAdvData.LifeStartTime = moment(new Date(this.editAdvData.LifeStartTime)).format('YYYY-MM-DD h:mm:ss')
+            this.editAdvData.LifeEndTime = moment(new Date(this.editAdvData.LifeEndTime)).format('YYYY-MM-DD h:mm:ss')
+            console.log(this.editAdvData)
             this.axios.post('/menuadv', {
               action: 'edit',
-              data: this.editData.data
+              data: this.editAdvData
             })
               .then((data) => {
                 console.log(data)
@@ -221,7 +240,7 @@
                 if (data.data.rescode === '200') {
                   this.$message({
                     type: 'success',
-                    message: '广告添加成功!'
+                    message: '广告修改成功!'
                   })
                   this.closeeditAdv()
                 }
@@ -240,7 +259,8 @@
           message: '图标上传成功!'
         })
 //        this.imageUrl = URL.createObjectURL(file.raw)
-        this.editData.data.PicURL = file.response.upload_path
+        this.editAdvData.PicURL = file.response.upload_path
+        this.editAdvData.PicSize = file.size
       },
       handleAvatarSuccess2 (res, file) {
         this.$message({
@@ -249,18 +269,19 @@
         })
 //        alert(1)
 //        this.imageUrl = URL.createObjectURL(file.raw)
-        this.editData.data.HighlightPicURL = file.response.upload_path
+        this.editAdvData.HighlightPicURL = file.response.upload_path
+        this.editAdvData.HighlightPicSize = file.size
       },
       beforeAvatarUpload (file) {
         console.log(file.type)
         const isJPG = (file.type === 'image/jpeg' || file.type === 'image/png')
-        const isLt2M = file.size / 1024 / 1024 < 1
+        const isLt2M = file.size / 1024 / 1024 < 0.1
 
         if (!isJPG) {
           this.$message.error('上传图片只能是 JPG或png 格式!')
         }
         if (!isLt2M) {
-          this.$message.error('上传图片大小不能超过 1MB!')
+          this.$message.error('上传图片大小不能超过 100K!')
         }
         return isJPG && isLt2M
       }

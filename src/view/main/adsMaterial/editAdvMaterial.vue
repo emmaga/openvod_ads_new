@@ -7,7 +7,7 @@
       </div>
       <div style="margin-top: 20px;margin-bottom: 20px;border-bottom: 1px solid #ddd;"></div>
       <div style="width: 90%;">
-        <el-form :model="editData.data" :rules="rules2" ref="editData.data" label-width="35%" class="demo-ruleForm">
+        <el-form :model="editData.data" :rules="rules2" ref="editData" label-width="35%" class="demo-ruleForm">
           <el-form-item label="名字" required prop="Name">
             <el-input type="text" placeholder="请输入名字" v-model="editData.data.Name" auto-complete="off"></el-input>
           </el-form-item>
@@ -161,6 +161,7 @@
     methods: {
       closeeditAdv () {
         this.$refs.upload.clearFiles()
+        this.$refs['editData'].resetFields()
         this.clearInputValue()
         this.selectFileBtn = false
         this.$emit('close', false)

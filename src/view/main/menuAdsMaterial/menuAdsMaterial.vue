@@ -1,11 +1,10 @@
 <template>
   <div>
     <div style="overflow:auto;">
-      <div class="Txt-left">
-        菜单广告素材
-
+      <div class="Txt-left FS18 pad-x20 pad-top20px">
+        <span class="FS16">当前位置：</span><b>菜单广告素材</b>
       </div>
-      <div style="padding: 20px;">
+      <div class="pad-x20">
         <div class="Txt-left" style="margin-top: 20px;">
           <el-button type="primary" style="margin-bottom: 15px;"
                      @click="addAdvData.show = true">添加广告
@@ -36,12 +35,20 @@
                   <el-button
                     size="small"
                     type="primary"
+                    v-if="username === scope.row.UserName || role === 'Normal'"
                     @click="menuInfoData.menuID = scope.row.ID;menuInfoData.show = true">菜单内容
                   </el-button>
                   <el-button
                     size="small"
                     type=""
+                    v-if="username === scope.row.UserName || role === 'Normal'"
                     @click="editAdvData.data=scope.row;editAdvData.show = true">属性
+                  </el-button>
+                  <el-button
+                    size="small"
+                    type="danger"
+                    v-if="username === scope.row.UserName || role === 'Normal'"
+                    @click="deleteMenuAdsMaterial(scope.row.ID)">删除
                   </el-button>
                 </template>
               </el-table-column>
@@ -148,10 +155,48 @@
           Name: row.Name
         }
       },
+      deleteMenuAdsMaterial (ID) {
+        alert(ID)
+        this.$confirm('确认删除？', '提示', {
+          confirmButtonText: '确认',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.axios.post('/menuadv', {
+            action: 'delete',
+            data: {
+              ID: ID
+            }
+          })
+            .then((data) => {
+              console.log(data)
+              if (data.status === 200) {
+                this.$message({
+                  type: 'success',
+                  message: '删除成功!'
+                })
+                this.getAdvList()
+              } else {
+                this.$message('！')
+              }
+            })
+            .catch((error) => {
+              console.log(error)
+            })
+        }).catch(() => {})
+      },
       handleCurrentChange (val) {
         console.log(val)
         this.currentPage = val
         this.getAdvList()
+      }
+    },
+    computed: {
+      username: function () {
+        return this.$store.state.username
+      },
+      role: function () {
+        return this.$store.state.role
       }
     },
     created () {

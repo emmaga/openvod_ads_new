@@ -33,6 +33,9 @@
             <el-button  type="danger" style="margin-bottom: 15px;"
                        @click="deleteMenuMaterial">批量删除素材
             </el-button>
+            <el-button  type="" style="margin-bottom: 15px;"
+                        @click="editMenuModalShow = true">菜单属性
+            </el-button>
           </div>
         <div>
           <el-table
@@ -111,9 +114,9 @@
             <el-form-item label="名称" required prop="Name">
               <el-input type="text" placeholder="请输入名称" v-model="addMenuData.Name" auto-complete="off"></el-input>
             </el-form-item>
-            <el-form-item label="序号" required prop="Seq">
-              <el-input type="number" placeholder="请输入序号" v-model="addMenuData.Seq" auto-complete="off"></el-input>
-            </el-form-item>
+            <!--<el-form-item label="序号" required prop="Seq">-->
+              <!--<el-input type="number" placeholder="请输入序号" v-model="addMenuData.Seq" auto-complete="off"></el-input>-->
+            <!--</el-form-item>-->
             <el-form-item label="格式">
               <el-radio class="radio" v-model="addMenuData.Type" label="Picture">图片</el-radio>
               <el-radio class="radio" v-model="addMenuData.Type" label="Video">视频</el-radio>
@@ -157,6 +160,69 @@
         <div class="Txt-right">
           <el-button type="primary" @click="submitForm('addMenuData')">添加</el-button>
           <el-button class="MarginLeft20" @click="closeAddMenu">取消</el-button>
+        </div>
+      </div>
+    </div>
+
+    <!--菜单属性弹窗-->
+    <div class="editMenuModal" v-if="editMenuModalShow">
+      <div class="editMenuModal_content">
+        <div class="FS20 mar-bottom15">菜单属性
+
+        <button class="btn" style="float: right" @click="closeEditMenu">&times;</button>
+        </div>
+        <div style="margin-top: 20px;margin-bottom: 20px;border-bottom: 1px solid #ddd;"></div>
+        <div style="width: 90%;">
+          <el-form :model="editMenuData" :rules="rules_edit" ref="editMenuData" label-width="35%" class="demo-ruleForm">
+            <el-form-item label="名称" required prop="Name">
+              <el-input type="text" placeholder="请输入名称" v-model="editMenuData.Name" auto-complete="off"></el-input>
+            </el-form-item>
+            <!--<el-form-item label="序号" required prop="Seq">-->
+              <!--<el-input type="number" placeholder="请输入序号" v-model="editMenuData.Seq" auto-complete="off"></el-input>-->
+            <!--</el-form-item>-->
+            <el-form-item label="格式">
+              <el-radio class="radio" v-model="editMenuData.Type" v-if="editMenuData.Type === 'Picture'" label="Picture">图片</el-radio>
+              <el-radio class="radio" v-model="editMenuData.Type" v-if="editMenuData.Type === 'Video'" label="Video">视频</el-radio>
+            </el-form-item>
+            <el-form-item label="图标" required>
+              <div class="block Txt-left pos-rel" >
+                <el-upload
+                  class="avatar-uploader"
+                  action="http://mres.cleartv.cn/upload"
+                  accept='.jpg,.png'
+                  :show-file-list="false"
+                  :on-success="handleAvatarSuccess5"
+                  :before-upload="beforeAvatarUpload">
+                  <img v-if="editMenuData.PicURL" :src="editMenuData.PicURL" class="avatar">
+                  <i v-if="!editMenuData.PicURL" class="el-icon-plus avatar-uploader-icon"></i>
+
+                </el-upload>
+                <span class="pos-abs" style="top: 0px; left: 190px;">建议尺寸：190*240,不超过300K</span>
+              </div>
+            </el-form-item>
+
+            <el-form-item label="背景海报" required>
+              <div class="block Txt-left pos-rel" >
+                <el-upload
+                  class="avatar-uploader"
+                  action="http://mres.cleartv.cn/upload"
+                  accept='.jpg,.png'
+                  :show-file-list="false"
+                  :on-success="handleAvatarSuccess6"
+                  :before-upload="beforeAvatarUpload2">
+                  <img v-if="editMenuData.BackgroundPicURL" :src="editMenuData.BackgroundPicURL" class="avatar">
+                  <i v-if="!editMenuData.BackgroundPicURL" class="el-icon-plus avatar-uploader-icon"></i>
+
+                </el-upload>
+                <span class="pos-abs" style="top: 0px; left: 190px;">建议尺寸：1920*1080,不超过1M</span>
+              </div>
+            </el-form-item>
+
+          </el-form>
+        </div>
+        <div class="Txt-right">
+          <el-button type="primary" @click="submitForm_edit('editMenuData')">添加</el-button>
+          <el-button class="MarginLeft20" @click="closeEditMenu">取消</el-button>
         </div>
       </div>
     </div>
@@ -269,6 +335,7 @@
       return {
         menuList: [],
         addMenuModalShow: false,
+        editMenuModalShow: false,
         addMenuData: {
           AdvID: '',
           PicSize: '',
@@ -279,7 +346,25 @@
           BackgroundPicSize: '',
           PicURL: ''
         },
+        editMenuData: {
+          AdvID: '',
+          PicSize: '',
+          Name: '',
+          Seq: '',
+          BackgroundPicURL: '',
+          Type: 'Picture',
+          BackgroundPicSize: '',
+          PicURL: ''
+        },
         rules_add: {
+          Name: [
+            {validator: Name, trigger: 'blur'}
+          ],
+          Seq: [
+            {validator: Seq, trigger: 'blur'}
+          ]
+        },
+        rules_edit: {
           Name: [
             {validator: Name, trigger: 'blur'}
           ],
@@ -335,6 +420,18 @@
 //          alert(this.menuInfoData.menuID)
           console.log(this.menuInfoData)
           this.getMenuList()
+        }
+      },
+      currentMenu: function (newDATA) {
+        this.editMenuData = {
+          PicSize: newDATA.PicSize,
+          Name: newDATA.Name,
+          Seq: newDATA.Seq,
+          BackgroundPicURL: newDATA.BackgroundPicURL,
+          Type: newDATA.Type,
+          BackgroundPicSize: newDATA.BackgroundPicSize,
+          PicURL: newDATA.PicURL,
+          MenuID: newDATA.ID
         }
       }
     },
@@ -416,18 +513,42 @@
           })
       },
       handleAvatarSuccess (res, file) {
-        this.addMenuData.PicURL = file.response.upload_path
-        this.addMenuData.PicSize = file.size
-      },
-      handleAvatarSuccess2 (res, file) {
-        this.addMenuData.BackgroundPicURL = file.response.upload_path
-        this.addMenuData.BackgroundPicSize = file.size
-      },
-      beforeAvatarUpload (file) {
         this.$message({
           type: 'success',
           message: '图片上传成功!'
         })
+        this.addMenuData.PicURL = file.response.upload_path
+        this.addMenuData.PicSize = file.size
+      },
+      handleAvatarSuccess2 (res, file) {
+        this.$message({
+          type: 'success',
+          message: '图片上传成功!'
+        })
+        this.addMenuData.BackgroundPicURL = file.response.upload_path
+        this.addMenuData.BackgroundPicSize = file.size
+      },
+      handleAvatarSuccess5 (res, file) {
+        this.$message({
+          type: 'success',
+          message: '图片上传成功!'
+        })
+        this.editMenuData.PicURL = file.response.upload_path
+        this.editMenuData.PicSize = file.size
+      },
+      handleAvatarSuccess6 (res, file) {
+        this.$message({
+          type: 'success',
+          message: '图片上传成功!'
+        })
+        this.editMenuData.BackgroundPicURL = file.response.upload_path
+        this.editMenuData.BackgroundPicSize = file.size
+      },
+      beforeAvatarUpload (file) {
+//        this.$message({
+//          type: 'success',
+//          message: '图片上传成功!'
+//        })
         console.log(file.type)
         const isJPG = (file.type === 'image/jpeg' || file.type === 'image/png')
         const isLt2M = file.size / 1024 / 1024 < 0.3
@@ -441,10 +562,10 @@
         return isJPG && isLt2M
       },
       beforeAvatarUpload2 (file) {
-        this.$message({
-          type: 'success',
-          message: '图片上传成功!'
-        })
+//        this.$message({
+//          type: 'success',
+//          message: '图片上传成功!'
+//        })
         console.log(file.type)
         const isJPG = (file.type === 'image/jpeg' || file.type === 'image/png')
         const isLt2M = file.size / 1024 / 1024 < 1
@@ -489,8 +610,56 @@
                     message: '菜单添加成功!'
                   })
                   this.getMenuList()
-                  this.addMenuModalShow = false
-                  this.$refs['addMenuData'].resetFields()
+                  this.closeAddMenu()
+                } else {
+                  this.$message('！')
+                }
+              })
+              .catch((error) => {
+                console.log(error)
+              })
+          } else {
+            return false
+          }
+        })
+      },
+      submitForm_edit (formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            if (this.editMenuData.PicURL === '') {
+              this.$message({
+                type: 'error',
+                message: '请上传图标!'
+              })
+              return
+            }
+            if (this.editMenuData.BackgroundPicURL === '') {
+              this.$message({
+                type: 'error',
+                message: '请上传背景海报!'
+              })
+              return
+            }
+//            this.editMenuData.Type = 'Video'
+            console.log(this.editMenuData)
+            this.axios.post('/menuadv/menu', {
+              action: 'edit',
+              data: this.editMenuData
+            })
+              .then((data) => {
+                console.log(data)
+                if (data.status === 200) {
+                  console.log(data)
+                  this.$message({
+                    type: 'success',
+                    message: '菜单修改成功!'
+                  })
+                  this.currentMenu.Name = this.editMenuData.Name
+                  console.log(this.currentMenu.Name)
+//                  this.getMenuList()
+//                  this.closeEditMenu()
+                  console.log(this.currentMenu.Name)
+                  this.editMenuModalShow = false
                 } else {
                   this.$message('！')
                 }
@@ -517,6 +686,12 @@
           PicURL: ''
         }
       },
+      closeEditMenu () {
+        this.editMenuModalShow = false
+        this.$refs['editMenuData'].resetFields()
+//        this.editMenuData = this.currentMenu
+//        console.log(this.currentMenu)
+      },
 //      获取菜单素材列表部分
       deleteMenu () {
         console.log(this.currentMenu)
@@ -537,7 +712,8 @@
                   type: 'success',
                   message: '删除成功!'
                 })
-                this.getMenuInfo(this.currentMenu)
+                this.getMenuList()
+                this.getMenuInfo(null)
               } else {
                 this.$message('！')
               }
@@ -750,7 +926,7 @@
 </script>
 
 <style lang="css" scoped>
-  .menuInfoModal,.addMenuModal,.uploadMaterialModal,.changeAdvSeqModal {
+  .menuInfoModal,.addMenuModal,.editMenuModal,.uploadMaterialModal,.changeAdvSeqModal {
     /*display: none;*/
     background: rgba(0, 0, 0, 0.8);
     /*width: 100%;*/
@@ -773,7 +949,7 @@
     background: #fff;
     border-radius: 5px;
   }
-  .addMenuModal_content,.uploadMaterialModal_content,.changeAdvSeqModal_content{
+  .addMenuModal_content,.editMenuModal_content,.uploadMaterialModal_content,.changeAdvSeqModal_content{
     position: relative;
     padding: 20px;
     width: 60%;
