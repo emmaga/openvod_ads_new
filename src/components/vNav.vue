@@ -38,23 +38,23 @@
     },
     methods: {
       jumpToAdsBoard: function () {
-        this.navActive = '1'
+//        this.navActive = '1'
         this.$router.push('/main/adsBoard')
       },
       jumpToAdsMaterial: function () {
-        this.navActive = '2'
+//        this.navActive = '2'
         this.$router.push('/main/adsMaterial')
       },
       jumpToMenuAdv: function () {
-        this.navActive = '3'
+//        this.navActive = '3'
         this.$router.push('/main/menuAdv')
       },
       jumpToMenuAdsMaterial: function () {
-        this.navActive = '4'
+//        this.navActive = '4'
         this.$router.push('/main/menuAdsMaterial')
       },
       jumpToUserManage: function () {
-        this.navActive = '5'
+//        this.navActive = '5'
         this.$router.push('/main/userManage')
       }
     },

@@ -31,9 +31,9 @@
             <el-table-column label="操作">
               <template scope="scope">
                 <!--<el-button-->
-                  <!--size="small"-->
-                  <!--type="primary"-->
-                  <!--@click="editAdvPosition(scope.row)">属性</el-button>-->
+                <!--size="small"-->
+                <!--type="primary"-->
+                <!--@click="editAdvPosition(scope.row)">属性</el-button>-->
                 <el-button
                   size="small"
                   type=""
@@ -59,23 +59,50 @@
     </div>
 
     <!--添加广告弹窗-->
-    <div id="addAdvListModal" v-show="allAdvListShow">
+    <div id="addAdvListModal" v-if="allAdvListShow">
       <div class="addAdvListModal_content">
-        <div class="FS20" style="">广告位添加广告<button class="btn" style="float: right" @click="allAdvListShow = false;checkList = []">&times;</button></div>
+        <div class="FS20" style="">广告位添加广告<button class="btn" style="float: right" @click="closeAddAdv">&times;</button></div>
         <div style="margin-top: 20px;margin-bottom: 5px;border-bottom: 1px solid gray;"></div>
         <div>
-          <el-checkbox-group v-model="checkList" >
-            <div class="pad-y5 bor-bottom-1"  @click = "checkBox" v-for="item in allAdvList">
-              <el-checkbox :label="item.AdvID" :key="item.AdvID"><span class="Txt-left pad-left60 DISIB WID500">{{item.Name}}</span></el-checkbox>
-            </div>
-
-          </el-checkbox-group>
+          <!--<el-checkbox-group v-model="checkList" >-->
+            <!--<div class="pad-y5 bor-bottom-1"  @click = "checkBox" v-for="item in allAdvList">-->
+              <!--<el-checkbox :label="item.AdvID" :key="item.AdvID"><span class="Txt-left pad-left60 DISIB WID500">{{item.Name}}</span></el-checkbox>-->
+            <!--</div>-->
+          <!--</el-checkbox-group>-->
+          <el-table
+            ref="multipleTable"
+            :data="itemList"
+            border
+            tooltip-effect="dark"
+            style="width: 100%"
+            @selection-change="handleSelectionChange">
+            <el-table-column
+              align="left"
+              type="selection"
+              width="100">
+            </el-table-column>
+            <el-table-column
+              align="left"
+              prop="Name"
+              label="项目"
+            >
+            </el-table-column>
+          </el-table>
+          <div class="block" style="text-align: left;margin-top: 15px;margin-bottom: 20px;">
+            <el-pagination
+              @current-change="handlePageChange_add"
+              :current-page.sync="newlistData.currentPage"
+              :page-size="newlistData.pageSize"
+              layout="total, prev, pager, next"
+              :total="newlistData.Total">
+            </el-pagination>
+          </div>
         </div>
         <div class="Txt-right mar-top20">
           <!--<button class="btn btn-success" @click="positionAddAdv">添加</button>-->
           <!--<button class="btn mar-left20 btn-warning" @click="allAdvListShow = false">取消</button>-->
-          <el-button type="primary" @click="positionAddAdv">添加</el-button>
-          <el-button class="mar-left20" @click="allAdvListShow = false;checkList = []">取消</el-button>
+          <el-button type="primary" @click="addItem">添加</el-button>
+          <el-button class="mar-left20" @click="closeAddAdv">取消</el-button>
         </div>
       </div>
     </div>
@@ -107,9 +134,14 @@
   export default {
     data () {
       return {
-        allAdvList: [],
-        Total: 0,
+        itemList: [],
+        newlistData: {
+          currentPage: 1,
+          pageSize: 25,
+          Total: null
+        },
         allAdvListShow: false,
+        selectedSqueue: [],
         checkList: [],
         changeAdvSeq: {
           AdvID: null,
@@ -121,9 +153,6 @@
     },
     props: ['listData'],
     methods: {
-      handleCurrentChange () {
-        console.log(1)
-      },
       closeAdvList () {
         this.$emit('close', false)
       },
@@ -132,22 +161,38 @@
           action: 'getAdvList',
           data: {
             PositionID: this.listData.PositionID,
-            per_page: 25,
-            page: 1,
+            per_page: this.newlistData.pageSize,
+            page: this.newlistData.currentPage,
             exclude: true
           }
         })
           .then((data) => {
+            this.changeingPage = false
 //            console.log(data)
             if (data.status === 200) {
-              this.allAdvList = data.data.data.data
-              this.Total = data.data.data.Toatl
+              this.itemList = data.data.data.data
+              this.newlistData.Total = data.data.data.Total
               this.allAdvListShow = true
+              if (this.selectedSqueue.length === 0) {
+                var length = Math.ceil(this.newlistData.Total / this.newlistData.pageSize)
+                for (var i = 0; i < length; i++) {
+                  this.selectedSqueue.push([])
+                }
+              }
+              var temp = this.getIndex(this.selectedSqueue[this.newlistData.currentPage - 1], this.itemList)
+              var tempChecked = []
+              for (var j = 0; j < temp.length; j++) {
+                tempChecked.push(this.itemList[temp[j]])
+              }
+              this.$nextTick(() => {
+                this.toggleSelection(tempChecked)
+              })
             } else {
               this.$message('！')
             }
           })
           .catch((error) => {
+            this.changeingPage = false
             console.log(error)
           })
       },
@@ -279,12 +324,91 @@
           })
       },
       handlePageChange (val) {
-        console.log(val)
-        this.listData.currentPage = val
+//        console.log(val)
+        this.newlistData.currentPage = val
         this.getPositionAdv()
       },
-      checkBox () {
-        console.log(this.checkList)
+      handlePageChange_add (val) {
+        this.changeingPage = true
+        this.newlistData.currentPage = val
+        this.getadvList()
+        this.$refs.multipleTable.clearSelection()
+//        console.log(this.selectedSqueue)
+      },
+      toggleSelection (rows) {
+        if (rows) {
+          rows.forEach(row => {
+            this.$refs.multipleTable.toggleRowSelection(row)
+          })
+        } else {
+          this.$refs.multipleTable.clearSelection()
+        }
+      },
+      handleSelectionChange (val) {
+//        console.log(this.itemList)
+        if (this.itemList.length === 0) return
+        if (!this.changeingPage) {
+          this.selectedSqueue[this.newlistData.currentPage - 1] = val
+        }
+//        console.log(this.selectedSqueue)
+      },
+      getIndex (arr, fatherArr) {
+        var tempArr = []
+        for (var i = 0; i < arr.length; i++) {
+          for (var j = 0; j < fatherArr.length; j++) {
+            if (fatherArr[j].AdvID === arr[i].AdvID) {
+              tempArr.push(j)
+            }
+          }
+        }
+        return tempArr
+      },
+      closeAddAdv () {
+        this.selectedSqueue = []
+        this.newlistData.currentPage = 1
+//        this.newlistData.Total = null
+        this.allAdvListShow = false
+      },
+      addItem () {
+        var idArr = []
+        for (var i = 0; i < this.selectedSqueue.length; i++) {
+          for (var j = 0; j < this.selectedSqueue[i].length; j++) {
+            idArr.push(this.selectedSqueue[i][j].AdvID)
+          }
+        }
+        console.log(idArr)
+        if (idArr.length < 1) {
+          this.$message({
+            type: 'error',
+            message: '请选择要添加的广告!'
+          })
+          return
+        }
+        this.axios.post('/position', {
+          action: 'addAdv',
+          data: {
+            PositionID: this.listData.PositionID,
+            AdvIDs: idArr,
+            ScheduleParam: 'Random'
+          }
+        })
+          .then((data) => {
+//            console.log(data)
+            if (data.status === 200) {
+//              console.log(data)
+              this.$message({
+                type: 'success',
+                message: '广告添加成功!'
+              })
+              this.closeAddAdv()
+              this.getPositionAdv()
+            } else {
+              this.$message('！')
+            }
+          })
+          .catch((error) => {
+            console.log(error)
+          })
       }
     }
   }

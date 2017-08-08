@@ -65,7 +65,7 @@
       <div class="TxtRight">
         <!--<button class="btn btn-success" id="editSceneBtn" @click="submitForm('editData.data')">添加</button>-->
         <!--<button class="btn MarginLeft20 btn-warning" @click="closeeditAdv">取消</button>-->
-        <el-button type="primary" @click="submitForm('editData.data')">修改</el-button>
+        <el-button type="primary" @click="submitForm('editData')">修改</el-button>
         <el-button class="MarginLeft20" @click="closeeditAdv">取消</el-button>
       </div>
     </div>

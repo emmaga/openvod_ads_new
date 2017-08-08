@@ -54,7 +54,7 @@
         itemList: [],
         listData: {
           currentPage: 1,
-          pageSize: 25,
+          pageSize: 2,
           Total: null
         },
         selectedSqueue: [],
@@ -162,7 +162,7 @@
         if (!this.changeingPage) {
           this.selectedSqueue[this.listData.currentPage - 1] = val
         }
-//        console.log(this.selectedSqueue)
+        console.log(this.selectedSqueue)
       },
       getIndex (arr, fatherArr) {
         var tempArr = []

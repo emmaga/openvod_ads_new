@@ -251,6 +251,8 @@
             console.log(data)
             if (data.status === 200) {
               this.advNewList = data.data.data.data
+              console.log(this.advNewList)
+              if (this.advNewList.length === 0) return
               for (var m = 0; m < this.advNewList.length; m++) {
                 this.advNewList[m].Name_CN = this.advNewList[m].Name['zh-CN']
               }
@@ -367,15 +369,16 @@
           })
       },
       handlePageChange (val) {
-        this.changeingPage = true
         console.log(val)
         this.listData.currentPage = val
         this.getPositionAdv()
       },
       handlePageChange_add (val) {
+        this.changeingPage = true
         console.log(val)
         this.newlistData.currentPage = val
         this.getAdvNewList()
+        this.$refs.multipleTable.clearSelection()
       },
       toggleSelection (rows) {
         if (rows) {
@@ -397,7 +400,7 @@
         var tempArr = []
         for (var i = 0; i < arr.length; i++) {
           for (var j = 0; j < fatherArr.length; j++) {
-            if (fatherArr[j].ID === arr[i].ID) {
+            if (fatherArr[j].AdvID === arr[i].AdvID) {
               tempArr.push(j)
             }
           }
